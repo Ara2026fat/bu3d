@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#EEF3F9">
+<title>بُعد · 3D printer</title>
+<link rel="icon" href="mark.webp">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="بُعد">
+<meta name="description" content="بُعد — طباعة ثلاثية الأبعاد حسب الطلب، الجبيل">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+[data-theme="tech"]  {--l1:#DCE8F5;--l2:#F7FAFD;--d1:#16202F;--d2:#080C13;--a1:#3C5A85;--a2:#9DC0E0;--acc:#2F4C75;--on:#FFFFFF;--b1:#CFE0F2;--b2:#E6EEF6}
+[data-theme="steel"] {--l1:#E2E6EC;--l2:#FAFBFC;--d1:#1B1F26;--d2:#0A0C0F;--a1:#4A5462;--a2:#A8B3C1;--acc:#3B4552;--on:#FFFFFF;--b1:#D8DEE6;--b2:#EDEFF2}
+[data-theme="teal"]  {--l1:#D8EDEA;--l2:#F6FBFA;--d1:#0D2320;--d2:#050E0C;--a1:#1F7A6E;--a2:#8FD0C6;--acc:#177268;--on:#FFFFFF;--b1:#C8E7E1;--b2:#E8F4F1}
+[data-theme="royal"] {--l1:#DDE2F7;--l2:#F8F9FE;--d1:#131A33;--d2:#070A16;--a1:#3A4C9E;--a2:#A3B2E8;--acc:#33449B;--on:#FFFFFF;--b1:#D2DAF6;--b2:#E9EDFB}
+[data-theme="sand"]  {--l1:#EFE6D9;--l2:#FBF8F4;--d1:#241C12;--d2:#0E0A06;--a1:#8A6A3C;--a2:#DBC49A;--acc:#7A5B30;--on:#FFFFFF;--b1:#E8DAC4;--b2:#F5EFE6}
+
+[data-mode="light"]{--bg1:var(--l1);--bg2:var(--l2);--ink:#1E2836;--dim:rgba(30,40,54,.62);
+ --gl1:rgba(255,255,255,.80);--gl2:rgba(255,255,255,.48);--gline:rgba(255,255,255,.92);
+ --soft:rgba(255,255,255,.66);--sline:rgba(30,40,54,.10);
+ --sh:0 16px 40px -20px rgba(30,50,80,.4);--sh2:0 8px 20px -12px rgba(30,50,80,.32);
+ --bevelTop:rgba(255,255,255,.9);--bevelBot:rgba(40,60,90,.13);--edge:rgba(60,90,133,.22);--wm:.05}
+[data-mode="dark"]{--bg1:var(--d1);--bg2:var(--d2);--ink:#EDF2F8;--dim:rgba(237,242,248,.6);
+ --gl1:rgba(255,255,255,.075);--gl2:rgba(255,255,255,.02);--gline:rgba(255,255,255,.12);
+ --soft:rgba(255,255,255,.06);--sline:rgba(255,255,255,.1);
+ --sh:0 20px 46px rgba(0,0,0,.5);--sh2:0 8px 22px rgba(0,0,0,.35);
+ --bevelTop:rgba(255,255,255,.16);--bevelBot:rgba(0,0,0,.5);--edge:rgba(157,192,224,.22);--wm:.06}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{background:linear-gradient(170deg,var(--bg1),var(--bg2) 72%);color:var(--ink);
+ font-family:'Tajawal',system-ui,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased;position:relative}
+body[dir="ltr"]{font-family:'Space Grotesk',system-ui,sans-serif}
+body::before,body::after{content:"";position:fixed;border-radius:50%;filter:blur(64px);pointer-events:none;z-index:0;opacity:.5}
+body::before{width:58vw;height:58vw;top:-14vw;inset-inline-start:-12vw;background:var(--b1)}
+body::after{width:52vw;height:52vw;bottom:-16vw;inset-inline-end:-14vw;background:var(--b2)}
+img{display:block;max-width:100%}
+button,input,textarea,select{font-family:inherit;color:inherit}
+.dim{color:var(--dim)}
+.disp{font-weight:900;letter-spacing:-.01em}
+
+.glass{background:linear-gradient(160deg,var(--gl1),var(--gl2));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+ border:1px solid var(--gline);border-radius:24px;
+ box-shadow:var(--sh),inset 0 1px 0 var(--bevelTop),inset 0 -2px 8px var(--bevelBot),inset 0 0 0 1px var(--edge)}
+.card{background:linear-gradient(140deg,var(--gl1),var(--gl2));border:1px solid var(--gline);border-radius:18px;
+ box-shadow:var(--sh2),inset 0 1px 0 var(--bevelTop),inset 0 -2px 5px var(--bevelBot);transition:box-shadow .2s,transform .15s}
+.card:active{transform:translateY(1px) scale(.985);box-shadow:inset 0 2px 6px var(--bevelBot)}
+.orb{width:38px;height:38px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;color:var(--on);font-weight:900;
+ background:radial-gradient(circle at 34% 28%,var(--a2),var(--a1) 78%);
+ box-shadow:0 8px 16px -6px var(--acc),inset 0 2px 3px rgba(255,255,255,.5),inset 0 -3px 6px rgba(0,0,0,.22)}
+
+.app{position:relative;z-index:1;height:100dvh;max-width:760px;margin:0 auto;display:flex;flex-direction:column;overflow:hidden;
+ padding:0 0 env(safe-area-inset-bottom)}
+.app::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:var(--wmImg);
+ background-size:130px;background-repeat:repeat;opacity:var(--wm)}
+.crown{display:flex;align-items:center;gap:10px;flex-shrink:0;padding:calc(env(safe-area-inset-top) + 14px) 16px 10px}
+.blogo{background:none;border:none;padding:0;cursor:pointer;line-height:0;flex-shrink:0}
+.blogo img{width:54px;filter:drop-shadow(0 3px 6px rgba(20,40,70,.25))}
+.tabs{display:flex;gap:8px;flex:1;min-width:0}
+.tab{flex:1;min-width:0;height:52px;padding:0 6px;border:1px solid var(--gline);cursor:pointer;border-radius:18px;
+ background:linear-gradient(160deg,var(--gl1),var(--gl2));color:var(--dim);
+ display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;
+ box-shadow:var(--sh2),inset 0 1px 0 var(--bevelTop),inset 0 -2px 5px var(--bevelBot),inset 0 0 0 1px var(--edge);transition:.2s}
+.tab span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tab.on{color:var(--on);border-color:transparent;background:linear-gradient(165deg,var(--a2),var(--a1));
+ box-shadow:0 10px 18px -10px var(--acc),inset 0 1px 0 rgba(255,255,255,.5),inset 0 -3px 7px rgba(0,0,0,.18)}
+.act{width:52px;height:52px;flex-shrink:0;border-radius:50%;cursor:pointer;position:relative;color:var(--ink);display:grid;place-items:center;
+ border:1px solid var(--gline);background:linear-gradient(165deg,var(--gl1),var(--gl2));
+ box-shadow:var(--sh2),inset 0 1px 0 var(--bevelTop),inset 0 -2px 5px var(--bevelBot),inset 0 0 0 1px var(--edge)}
+.act:active{box-shadow:inset 0 3px 7px var(--bevelBot)}
+.badge{position:absolute;top:-2px;inset-inline-end:-2px;min-width:21px;height:21px;padding:0 6px;border-radius:11px;
+ background:linear-gradient(165deg,var(--a2),var(--a1));color:var(--on);font-size:11px;font-weight:900;display:grid;place-items:center}
+.filters{flex-shrink:0;padding:0 16px 10px}
+.stage{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 16px 20px;scrollbar-width:none}
+.stage::-webkit-scrollbar{display:none}
+.plist{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 16px 20px;scrollbar-width:none}
+.plist::-webkit-scrollbar{display:none}
+
+.row{display:flex;align-items:center;gap:10px}
+.between{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.gridp{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:9px}
+.cats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.hs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:0 2px 2px}
+.hs::-webkit-scrollbar{display:none}
+
+.btn{border:none;border-radius:999px;font-weight:700;font-size:14px;padding:13px 20px;cursor:pointer;text-decoration:none;
+ display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:filter .2s}
+.btn.p{background:linear-gradient(165deg,var(--a2),var(--a1));color:var(--on);
+ box-shadow:0 12px 24px -12px var(--acc),inset 0 1px 0 rgba(255,255,255,.45),inset 0 -3px 7px rgba(0,0,0,.18)}
+.btn.p:active{box-shadow:inset 0 3px 8px rgba(0,0,0,.25)}
+.btn.g{background:var(--soft);color:var(--ink);border:1px solid var(--sline)}
+.btn.sm{padding:9px 14px;font-size:12.5px}
+.btn.full{width:100%}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.chip{border-radius:999px;padding:10px 14px;font-size:12.5px;font-weight:600;white-space:nowrap;cursor:pointer;
+ background:var(--soft);border:1px solid var(--sline);color:var(--dim);transition:.2s;text-align:center}
+.chip.on{background:linear-gradient(165deg,var(--a2),var(--a1));color:var(--on);border-color:transparent;
+ box-shadow:0 6px 12px -7px var(--acc),inset 0 1px 0 rgba(255,255,255,.4)}
+.input{width:100%;background:var(--soft);border:1px solid var(--sline);border-radius:14px;padding:12px 14px;font-size:14.5px;outline:none}
+.input:focus{border-color:var(--acc)}
+.lbl{font-size:11.5px;color:var(--dim);display:block;margin-bottom:6px;font-weight:500}
+.eyebrow{font-size:10.5px;letter-spacing:.12em;color:var(--acc);font-weight:900;text-transform:uppercase}
+.media{aspect-ratio:1;display:grid;place-items:center;overflow:hidden;border-radius:14px;background:rgba(255,255,255,.4)}
+[data-mode="dark"] .media{background:rgba(255,255,255,.05)}
+.media img{width:100%;height:100%;object-fit:cover}
+.pill{font-size:9px;font-weight:900;padding:3px 8px;border-radius:99px;background:linear-gradient(165deg,var(--a2),var(--a1));color:var(--on)}
+.rule{display:flex;align-items:center;gap:9px;margin:15px 0 11px;color:var(--acc);font-size:11px;font-weight:900}
+.rule::before,.rule::after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,var(--acc),transparent);opacity:.4}
+
+/* ── the pipeline ── */
+.pipe{display:grid;gap:0;margin-top:6px}
+.step{display:flex;gap:12px;align-items:flex-start;position:relative;padding-bottom:14px}
+.step::before{content:"";position:absolute;inset-inline-start:15px;top:32px;bottom:0;width:2px;background:var(--sline)}
+.step:last-child::before{display:none}
+.step.done::before{background:linear-gradient(180deg,var(--a1),var(--a2))}
+.dot{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-size:12px;font-weight:900;
+ background:var(--soft);border:1px solid var(--sline);color:var(--dim);z-index:1}
+.step.done .dot{background:linear-gradient(165deg,var(--a2),var(--a1));color:var(--on);border-color:transparent;
+ box-shadow:0 6px 12px -6px var(--acc),inset 0 1px 0 rgba(255,255,255,.45)}
+.step.now .dot{box-shadow:0 0 0 4px color-mix(in srgb,var(--acc) 22%,transparent),0 6px 12px -6px var(--acc)}
+.stitle{font-size:13.5px;font-weight:900;padding-top:6px}
+.snote{font-size:11.5px;color:var(--dim);margin-top:3px;line-height:1.7}
+
+.ov{position:fixed;inset:0;z-index:80;background:rgba(16,26,40,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+ display:flex;align-items:flex-end;justify-content:center;animation:fade .18s both}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.sheet{width:100%;max-width:760px;max-height:92dvh;overflow-y:auto;scrollbar-width:none;
+ background:linear-gradient(170deg,var(--bg1),var(--bg2) 85%);border:1px solid var(--gline);
+ border-radius:26px 26px 0 0;padding:16px 16px calc(20px + env(safe-area-inset-bottom));
+ box-shadow:0 -20px 60px -20px rgba(16,30,50,.5);animation:fade .18s both}
+.sheet::-webkit-scrollbar{display:none}
+.handle{width:42px;height:4px;border-radius:4px;background:var(--sline);margin:0 auto 14px}
+.toast{position:fixed;bottom:26px;inset-inline:0;display:flex;justify-content:center;z-index:99;pointer-events:none}
+.toast div{background:linear-gradient(165deg,var(--a2),var(--a1));color:var(--on);padding:11px 20px;border-radius:999px;
+ font-size:13.5px;font-weight:700;box-shadow:0 14px 30px -12px var(--acc)}
+.ibar{position:fixed;inset-inline:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:70;display:flex;align-items:center;gap:10px;
+ padding:10px 12px;border-radius:20px;max-width:736px;margin:0 auto;background:linear-gradient(160deg,var(--gl1),var(--gl2));
+ backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--gline);box-shadow:var(--sh)}
+.swatch{border:none;background:none;cursor:pointer;padding:6px;border-radius:18px;text-align:center}
+.swatch.on{box-shadow:0 0 0 2px var(--acc)}
+.swatch i{display:block;height:48px;border-radius:13px;box-shadow:var(--sh2)}
+.swatch span{display:block;font-size:11.5px;margin-top:7px;font-weight:700}
+.dotc{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid transparent;box-shadow:0 4px 10px -4px rgba(0,0,0,.4)}
+.dotc.on{border-color:var(--ink)}
+canvas.cv{width:100%;border-radius:16px;background:rgba(0,0,0,.06);touch-action:none;display:block}
+.range{width:100%;accent-color:var(--acc)}
+.drop{border:1.5px dashed var(--sline);border-radius:16px;padding:20px;text-align:center;cursor:pointer;background:var(--soft)}
+.hide{display:none}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body dir="rtl" data-theme="tech" data-mode="light">
+<div id="app"></div>
+<script src="catalog.js"></script>
+<script>
+"use strict";
+var LOGO="logo.webp", MARK="mark.webp";
+var D=(window.BU3D||{cats:[],products:[],stages:[]});
+var CATS=D.cats||[], PRODUCTS=D.products||[], STAGES=D.stages||[],
+    MATS=D.materials||[], QUAL=D.qualities||[], INFILL=D.infills||[], COLORS=D.colors||[];
+
+/* ───────── storage ───────── */
+var KEY="bu3d.v1";
+var store={read:function(){try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}},
+ write:function(o){try{localStorage.setItem(KEY,JSON.stringify(o));return true}catch(e){return false}}};
+function persist(){store.write({lang:S.lang,cfg:S.cfg,orders:S.orders,products:S.products})}
+
+/* ───────── images in IndexedDB ───────── */
+var DB=null;
+function idb(){return new Promise(function(res,rej){
+ if(DB)return res(DB); if(!window.indexedDB)return rej();
+ var r=indexedDB.open("bu3d",1);
+ r.onupgradeneeded=function(){try{r.result.createObjectStore("imgs")}catch(e){}};
+ r.onsuccess=function(){DB=r.result;res(DB)}; r.onerror=function(){rej()};})}
+function idbSet(k,v){return idb().then(function(d){return new Promise(function(res){
+ var tx=d.transaction("imgs","readwrite");tx.objectStore("imgs").put(v,k);tx.oncomplete=function(){res(1)}})}).catch(function(){})}
+function idbDel(k){return idb().then(function(d){return new Promise(function(res){
+ var tx=d.transaction("imgs","readwrite");tx.objectStore("imgs").delete(k);tx.oncomplete=function(){res(1)}})}).catch(function(){})}
+function idbAll(){return idb().then(function(d){return new Promise(function(res){
+ var out={},tx=d.transaction("imgs","readonly"),c=tx.objectStore("imgs").openCursor();
+ c.onsuccess=function(e){var cur=e.target.result;if(cur){out[cur.key]=cur.value;cur.continue()}else res(out)};
+ c.onerror=function(){res({})}})}).catch(function(){return{}})}
+
+/* ───────── strings ───────── */
+var T={
+ shop:{ar:"المتجر",en:"Shop"},order:{ar:"اطلب",en:"Order"},track:{ar:"طلباتي",en:"My orders"},
+ all:{ar:"الكل",en:"All"},search:{ar:"ابحث",en:"Search"},none:{ar:"لا توجد نتائج",en:"No results"},
+ quoted:{ar:"يُسعَّر بعد المراجعة",en:"Quoted after review"},from:{ar:"يبدأ من",en:"from"},
+ requestIt:{ar:"اطلب هذا",en:"Request this"},
+ orderWays:{ar:"كيف تحب نبدأ؟",en:"How shall we start?"},
+ wProd:{ar:"منتج من المتجر",en:"A product from the shop"},wProdD:{ar:"اختر من الكتالوج واكتب اسمك ولونك",en:"Pick from the catalogue, add your name and colour"},
+ wFile:{ar:"عندي ملف جاهز",en:"I have a file"},wFileD:{ar:"STL أو OBJ أو 3MF — نراجعه ونسعّره",en:"STL, OBJ or 3MF — we review and quote"},
+ wIdea:{ar:"عندي فكرة فقط",en:"I have an idea"},wIdeaD:{ar:"صف فكرتك وسنصممها ثم نطبعها",en:"Describe it; we design then print"},
+ material:{ar:"الخامة",en:"Material"},quality:{ar:"الجودة",en:"Quality"},infill:{ar:"التعبئة",en:"Infill"},
+ color:{ar:"اللون",en:"Colour"},qty:{ar:"الكمية",en:"Quantity"},textOn:{ar:"الاسم أو العبارة المطلوبة",en:"Name or text"},
+ fileName:{ar:"اسم الملف",en:"File name"},fileHint:{ar:"اكتب اسم الملف، وسترفقه في واتساب بعد الإرسال",en:"Type the file name; you'll attach it on WhatsApp"},
+ idea:{ar:"اشرح فكرتك",en:"Describe your idea"},ideaPh:{ar:"المقاس التقريبي، الاستخدام، أي مرجع بصري",en:"Rough size, use, any reference"},
+ notes:{ar:"ملاحظات",en:"Notes"},optional:{ar:"اختياري",en:"optional"},
+ name:{ar:"اسمك",en:"Your name"},phone:{ar:"رقم الجوال",en:"Phone"},city:{ar:"المدينة",en:"City"},
+ addr:{ar:"الحي أو العنوان",en:"District or address"},
+ send:{ar:"إرسال الطلب عبر واتساب",en:"Send on WhatsApp"},
+ sendHint:{ar:"طلبك محفوظ هنا، ويصل الورشة عند إرساله على واتساب.",en:"Saved here; it reaches the workshop once you send it."},
+ required:{ar:"أكمل الاسم والجوال",en:"Add your name and phone"},
+ created:{ar:"تم إنشاء الطلب",en:"Order created"},
+ noOrders:{ar:"لا توجد طلبات بعد",en:"No orders yet"},
+ noOrdersD:{ar:"ابدأ من تبويب «اطلب»، وستتابع هنا كل مرحلة حتى التسليم.",en:"Start from Order, and follow every stage here."},
+ orderNo:{ar:"طلب",en:"Order"},price:{ar:"السعر",en:"Price"},pending:{ar:"بانتظار التسعير",en:"Awaiting quote"},
+ approve:{ar:"أوافق على السعر",en:"Approve the price"},approved:{ar:"تمت الموافقة",en:"Approved"},
+ askUpdate:{ar:"استفسر عن الطلب",en:"Ask about this order"},
+ stageNow:{ar:"المرحلة الحالية",en:"Current stage"},
+ settings:{ar:"الإعدادات",en:"Settings"},
+ sContact:{ar:"تواصل",en:"Contact"},sLook:{ar:"المظهر",en:"Look"},sMe:{ar:"بياناتي",en:"My details"},
+ sGuide:{ar:"دليل الاستخدام",en:"Guide"},sShop:{ar:"الورشة",en:"Workshop"},sItems:{ar:"المنتجات",en:"Products"},
+ sData:{ar:"البيانات",en:"Data"},
+ ownerEnter:{ar:"دخول صاحب الورشة",en:"Workshop access"},
+ ownerHint:{ar:"أدخل الرمز لإدارة الطلبات والمنتجات. الزبون لا يرى هذه الأقسام.",en:"Enter the passcode to manage orders and products."},
+ ownerOpen:{ar:"دخول",en:"Unlock"},ownerBad:{ar:"الرمز غير صحيح",en:"Wrong passcode"},
+ ownerOn:{ar:"وضع الورشة مفعّل",en:"Workshop mode on"},ownerExit:{ar:"خروج",en:"Exit"},
+ changePin:{ar:"تغيير الرمز",en:"Change passcode"},newPin:{ar:"الرمز الجديد",en:"New passcode"},
+ pinNote:{ar:"الرمز الافتراضي ٣٣٣٣ — غيّره. هذا إخفاء للواجهة وليس حماية كاملة.",en:"Default is 3333 — change it. This hides the UI, it is not full security."},
+ wsOrders:{ar:"طلبات الورشة",en:"Workshop orders"},
+ setPrice:{ar:"حدد السعر",en:"Set the price"},sendQuote:{ar:"أرسل عرض السعر",en:"Send the quote"},
+ nextStage:{ar:"المرحلة التالية",en:"Advance stage"},tellClient:{ar:"أبلغ الزبون",en:"Notify customer"},
+ statusLink:{ar:"رابط متابعة الطلب",en:"Status link"},linkCopied:{ar:"تم نسخ الرابط",en:"Link copied"},
+ waNum:{ar:"رقم واتساب الورشة",en:"Workshop WhatsApp"},waNumPh:{ar:"مثال 9665xxxxxxxx",en:"e.g. 9665xxxxxxxx"},
+ insta:{ar:"إنستقرام",en:"Instagram"},shopName:{ar:"اسم الورشة",en:"Workshop name"},
+ waBtn:{ar:"تواصل عبر واتساب",en:"WhatsApp"},igBtn:{ar:"تابعنا على إنستقرام",en:"Instagram"},
+ noWa:{ar:"أضف رقم الواتساب من: الإعدادات ← الورشة",en:"Add the WhatsApp number in Settings → Workshop"},
+ lightM:{ar:"فاتح",en:"Light"},darkM:{ar:"داكن",en:"Dark"},language:{ar:"اللغة",en:"Language"},
+ install:{ar:"ثبّت التطبيق على جوالك",en:"Install the app"},installD:{ar:"يفتح كتطبيق ويعمل بدون إنترنت",en:"Opens like an app, works offline"},
+ installNow:{ar:"تثبيت",en:"Install"},later:{ar:"لاحقاً",en:"Later"},
+ iosInstall:{ar:"على الآيفون: زر المشاركة ⬆︎ ثم «إضافة إلى الشاشة الرئيسية».",en:"On iPhone: Share, then Add to Home Screen."},
+ installed:{ar:"التطبيق مثبّت ✓",en:"Installed ✓"},
+ exportD:{ar:"تصدير",en:"Export"},importD:{ar:"استيراد",en:"Import"},resetD:{ar:"إعادة ضبط",en:"Reset"},
+ confirmReset:{ar:"سيُحذف كل شيء. متابعة؟",en:"Everything will be deleted. Continue?"},
+ saved:{ar:"تم الحفظ",en:"Saved"},del:{ar:"حذف",en:"Delete"},save:{ar:"حفظ",en:"Save"},back:{ar:"رجوع",en:"Back"},
+ rights:{ar:"جميع الحقوق محفوظة لبُعد ٢٠٢٦ · ١٤٤٨هـ",en:"All rights reserved — bu3d 2026 · 1448H"},
+ addProduct:{ar:"منتج جديد",en:"New product"},editProduct:{ar:"تعديل المنتج",en:"Edit product"},
+ nameAr:{ar:"الاسم بالعربية",en:"Name (Arabic)"},nameEn:{ar:"الاسم بالإنجليزية",en:"Name (English)"},
+ descAr:{ar:"الوصف بالعربية",en:"Description (Arabic)"},priceL:{ar:"السعر (٠ = يُسعَّر لاحقاً)",en:"Price (0 = quote later)"},
+ category:{ar:"القسم",en:"Category"},featured:{ar:"مميز",en:"Featured"},soldOut:{ar:"غير متاح",en:"Unavailable"},
+ photo:{ar:"الصورة",en:"Photo"},dropHint:{ar:"اضغط لاختيار صورة من جوالك",en:"Tap to choose a photo"},
+ enhance:{ar:"تحسين الصورة",en:"Enhance"},zoom:{ar:"تكبير",en:"Zoom"},bright:{ar:"الإضاءة",en:"Brightness"},
+ contrast:{ar:"التباين",en:"Contrast"},sat:{ar:"التشبّع",en:"Saturation"},qualityS:{ar:"جودة الحفظ",en:"Save quality"},
+ dragMove:{ar:"اسحب الصورة لضبط موضعها",en:"Drag to position"},saveImg:{ar:"حفظ الصورة",en:"Save image"},
+ reset:{ar:"إعادة ضبط",en:"Reset"},restoreImg:{ar:"استعادة الصورة الأصلية",en:"Restore original"},
+ gTitle:{ar:"كيف يعمل التطبيق",en:"How it works"},
+ gc1:{ar:"اختر أو ارفع",en:"Choose or upload"},gc1d:{ar:"منتج من المتجر، أو ملفك الجاهز، أو فكرة تريد تصميمها.",en:"A product, your file, or an idea to design."},
+ gc2:{ar:"أرسل الطلب",en:"Send the request"},gc2d:{ar:"يفتح واتساب برسالة فيها كل التفاصيل ورقم الطلب — أرفق ملفك هناك.",en:"WhatsApp opens with the details and your order number — attach the file there."},
+ gc3:{ar:"استلم السعر",en:"Get the quote"},gc3d:{ar:"نراجع الملف والمقاس ونرسل السعر والمدة، وتوافق من داخل التطبيق.",en:"We review and send price and time; you approve in the app."},
+ gc4:{ar:"تابع المراحل",en:"Follow the stages"},gc4d:{ar:"من «طلباتي» ترى المرحلة: مراجعة ← طباعة ← تشطيب ← جاهز ← تسليم.",en:"In My orders: review → printing → finishing → ready → delivered."},
+ go1:{ar:"استقبل الطلب",en:"Receive it"},go1d:{ar:"يصلك على واتساب. افتح «الورشة ← طلبات الورشة» وأضفه برقمه.",en:"It arrives on WhatsApp. Open Workshop → orders and add it."},
+ go2:{ar:"سعّر وأرسل",en:"Price it"},go2d:{ar:"اكتب السعر ثم «أرسل عرض السعر» — تُفتح رسالة جاهزة فيها رابط يحدّث شاشة الزبون.",en:"Enter the price, then send the quote — the message carries a link that updates the customer's screen."},
+ go3:{ar:"حرّك المراحل",en:"Move the stages"},go3d:{ar:"كل ضغطة تنقل الطلب مرحلة، ويمكنك إبلاغ الزبون بضغطة.",en:"Each tap advances a stage, and notifies the customer."},
+ go4:{ar:"أدر المنتجات",en:"Manage products"},go4d:{ar:"أضف منتجاً أو عدّل السعر أو استبدل الصورة من «المنتجات».",en:"Add, edit price, or replace photos in Products."}
+};
+/* ───────── state ───────── */
+var sv=store.read();
+var DEF={theme:"tech",mode:"light",name:"",phone:"",city:"الجبيل",shop:"بُعد",
+ whats:"966591355799",insta:"https://www.instagram.com/bu3d.printer",pin:"3333",ownerOn:false,installAsk:0};
+var S={lang:sv.lang||"ar",cfg:Object.assign({},DEF,sv.cfg||{}),tab:"shop",cat:"all",q:"",
+ products:sv.products||JSON.parse(JSON.stringify(PRODUCTS)),orders:sv.orders||[],images:{},
+ sheet:null,setTab:"",toast:null,req:null,edit:null,editor:null,pinTry:"",pinBad:false,newPin:"",wsSel:null};
+
+/* ───────── helpers ───────── */
+function t(k){return T[k]?T[k][S.lang]:k}
+function nm(o){return o?(S.lang==="ar"?o.ar:o.en):""}
+function note(p){return S.lang==="ar"?p.nAr:p.nEn}
+function num(n){return S.lang==="ar"?Number(n).toLocaleString("ar-EG"):String(n)}
+function money(n){var v=Math.round(n);return S.lang==="ar"?v.toLocaleString("ar-EG")+" ر.س":"SAR "+v}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function prod(id){for(var i=0;i<S.products.length;i++)if(S.products[i].id===id)return S.products[i];return null}
+function imgs(id){if(S.images[id]!==undefined)return S.images[id];var p=prod(id);return (p&&p.img)?[p.img]:[]}
+function mainImg(id){var a=imgs(id);return a.length?a[0]:null}
+function setImgs(id,a){S.images[id]=a;idbSet(id,a)}
+function toast(m){S.toast=m;render();clearTimeout(window.__t);window.__t=setTimeout(function(){S.toast=null;render()},1900)}
+function isOwner(){return !!S.cfg.ownerOn}
+function waNum(){return String(S.cfg.whats||"").replace(/[^0-9]/g,"")}
+function waLink(msg){return waNum()?("https://wa.me/"+waNum()+(msg?"?text="+encodeURIComponent(msg):"")):S.cfg.insta}
+function b64e(s){try{return btoa(unescape(encodeURIComponent(s))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}catch(e){return""}}
+function b64d(s){try{return decodeURIComponent(escape(atob(String(s).replace(/-/g,"+").replace(/_/g,"/"))))}catch(e){return""}}
+function code(){return "BU-"+Math.floor(1000+Math.random()*9000)}
+function findOrder(c){for(var i=0;i<S.orders.length;i++)if(S.orders[i].code===c)return S.orders[i];return null}
+
+/* ───────── icons ───────── */
+var I={search:"M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM21 21l-4.3-4.3",
+ cube:"M12 3l8 4.5v9L12 21l-8-4.5v-9zM4 7.5l8 4.5 8-4.5M12 12v9",
+ file:"M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8zM14 3v5h5",
+ bulb:"M9 18h6M10 21h4M12 3a6 6 0 0 1 4 10.5V16H8v-2.5A6 6 0 0 1 12 3",
+ list:"M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01",
+ user:"M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0",
+ gear:"M4 8h8M16 8h4M4 16h4M12 16h8M12 8a2 2 0 1 0 4 0 2 2 0 1 0-4 0M8 16a2 2 0 1 0 4 0 2 2 0 1 0-4 0",
+ chev:"M9 5l7 7-7 7",check:"M4 12l5 5L20 6",x:"M6 6l12 12M18 6L6 18",plus:"M12 5v14M5 12h14",minus:"M5 12h14",
+ wa:"M3 21l1.7-5A8.5 8.5 0 1 1 8 19.3zM9 9.5c0 4 3 6.5 6 6.5.8 0 1.5-.6 1.5-1.2l-2-1-1 1c-1.2-.5-2.3-1.6-2.8-2.8l1-1-1-2c-.6 0-1.7.7-1.7 1.5z",
+ ig:"M4 4h16v16H4zM12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7M17 6.8h.01",
+ img:"M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6",trash:"M4 7h16M9 7V5h6v2M6 7l1 14h10l1-14",
+ dl:"M12 4v11M7 11l5 5 5-5M4 20h16",ul:"M12 20V9M7 13l5-5 5 5M4 4h16",
+ star:"M12 4l2.3 4.9 5.2.7-3.8 3.6 1 5.2-4.7-2.6-4.7 2.6 1-5.2L4.5 9.6l5.2-.7z",
+ clock:"M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2",
+ box:"M3 8l9-4 9 4v9l-9 4-9-4zM3 8l9 4 9-4M12 12v9",
+ palette:"M12 21a9 9 0 1 1 0-18c5 0 9 3.6 9 8 0 2.5-2 4-4 4h-2a2 2 0 0 0-1.4 3.4A2 2 0 0 1 12 21z",
+ link:"M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"};
+function ico(n,s,c){return '<svg width="'+(s||18)+'" height="'+(s||18)+'" viewBox="0 0 24 24" fill="none" stroke="'+(c||"currentColor")+
+ '" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="'+I[n]+'"/></svg>'}
+/* simple line art for products that have no photo yet */
+var ART={tag:'<path d="M20 52 52 20l28 28-32 32z" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="60" cy="40" r="5" fill="currentColor"/>',
+ plaque:'<rect x="20" y="24" width="60" height="46" rx="6" fill="none" stroke="currentColor" stroke-width="4"/><path d="M32 40h36M32 52h24" stroke="currentColor" stroke-width="4"/>',
+ stand:'<path d="M28 74h44M38 74V38a10 10 0 0 1 10-10h6" fill="none" stroke="currentColor" stroke-width="4"/><rect x="50" y="24" width="22" height="34" rx="4" fill="none" stroke="currentColor" stroke-width="4"/>',
+ vase:'<path d="M38 22h24l-6 14c10 8 14 18 14 26a20 20 0 0 1-40 0c0-8 4-18 14-26z" fill="none" stroke="currentColor" stroke-width="4"/>',
+ box:'<path d="M22 34h56v42H22zM22 34l12-12h32l12 12M42 34v42M62 34v42" fill="none" stroke="currentColor" stroke-width="4"/>',
+ gear:'<circle cx="50" cy="50" r="16" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="50" cy="50" r="5" fill="currentColor"/><path d="M50 22v8M50 70v8M22 50h8M70 50h8M30 30l6 6M64 64l6 6M70 30l-6 6M36 64l-6 6" stroke="currentColor" stroke-width="4"/>',
+ cube:'<path d="M50 18l28 16v32L50 82 22 66V34z" fill="none" stroke="currentColor" stroke-width="4"/><path d="M22 34l28 16 28-16M50 50v32" stroke="currentColor" stroke-width="4"/>'};
+function art(n,s){return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 100 100" style="color:var(--acc);opacity:.8">'+(ART[n]||ART.cube)+'</svg>'}
+</script>
+<script src="app.js"></script>
+</body>
+</html>
